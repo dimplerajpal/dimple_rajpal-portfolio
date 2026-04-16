@@ -3,132 +3,844 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dimple Rajpal — Technical Product Manager</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Dimple Rajpal, Technical Product Manager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ══ TOKENS ══ */
+    :root {
+      --ink: #0d1117;
+      --ink-2: #161b22;
+      --ink-3: #1c2330;
+      --ink-4: #252e3d;
+      --card: #131920;
+      --card-b: #1a2232;
+      --sage: #7ec8a4;
+      --sage-dim: rgba(126,200,164,0.12);
+      --sage-glow: rgba(126,200,164,0.06);
+      --coral: #ff7c5c;
+      --coral-dim: rgba(255,124,92,0.12);
+      --sky: #5ba4cf;
+      --sky-dim: rgba(91,164,207,0.12);
+      --gold: #e8c96d;
+      --gold-dim: rgba(232,201,109,0.1);
+      --txt: #e6edf3;
+      --txt-2: #8b949e;
+      --txt-3: #3d4f63;
+      --b: #1e2d40;
+      --b-light: rgba(255,255,255,0.05);
+      --f-display: 'Fraunces', Georgia, serif;
+      --f-body: 'Plus Jakarta Sans', sans-serif;
+      --f-mono: 'Fira Code', monospace;
+      --r: 14px;
+      --r-sm: 8px;
+      --sh: 0 4px 28px rgba(0,0,0,0.45);
+      --sh-h: 0 12px 48px rgba(0,0,0,0.55);
+      --ease: 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--ink);
+      color: var(--txt);
+      font-family: var(--f-body);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ══ CUSTOM CURSOR ══ */
+    .cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--sage);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, background 0.2s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(126,200,164,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: all 0.18s ease;
+    }
+
+    /* ══ NOISE OVERLAY ══ */
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events:none;
+      z-index:1000;
+      opacity:0.4;
+    }
+
+    /* ══ UTIL ══ */
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
+    .chip {
+      font-family: var(--f-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .h2 {
+      font-family: var(--f-display);
+      font-size: clamp(1.8rem,3.5vw,2.7rem);
+      line-height: 1.2;
+      font-weight: 400;
+    }
+    .sub {
+      color: var(--txt-2);
+      font-size: 1rem;
+      max-width: 640px;
+      margin-top: 12px;
+    }
+
+    /* ══ NAVBAR ══ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--b-light);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--f-display);
+      font-size: 1.3rem;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+    .nav-logo span { color: var(--sage); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--txt-2);
+      transition: color var(--ease);
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover { color: var(--txt); }
+    .nav-cta {
+      background: var(--sage) !important;
+      color: var(--ink) !important;
+      padding: 8px 20px !important;
+      border-radius: 6px !important;
+      font-weight: 600 !important;
+      color: #0d1117 !important;
+    }
+    .nav-cta:hover { opacity: 0.88 !important; transform: translateY(-1px); }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative;
+      padding: 100px 0 80px;
+      overflow: hidden;
+    }
+    .hero-mesh {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 75% 30%, rgba(126,200,164,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(91,164,207,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 50% 50%, rgba(232,201,109,0.03) 0%, transparent 70%);
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(126,200,164,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(126,200,164,0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--f-mono);
+      font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sage);
+      background: var(--sage-dim);
+      border: 1px solid rgba(126,200,164,0.22);
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 32px;
+      animation: slideDown 0.7s ease both;
+    }
+    .pulse { width:6px;height:6px;border-radius:50%;background:var(--sage);animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.25} }
+
+    .hero-name {
+      font-family: var(--f-display);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      line-height: 1;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--txt);
+      margin-bottom: 8px;
+      animation: slideDown 0.7s 0.08s ease both;
+    }
+    .hero-name em { color: var(--sage); font-style: italic; font-weight: 300; }
+    .hero-role {
+      font-family: var(--f-display);
+      font-size: clamp(1.2rem,2.5vw,2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--txt-2);
+      margin-bottom: 28px;
+      animation: slideDown 0.7s 0.14s ease both;
+    }
+    .hero-desc {
+      font-size: clamp(0.95rem,1.6vw,1.1rem);
+      color: var(--txt-2);
+      max-width: 600px;
+      line-height: 1.8;
+      margin-bottom: 44px;
+      animation: slideDown 0.7s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; margin-bottom: 60px;
+      animation: slideDown 0.7s 0.26s ease both;
+    }
+    .btn-fill {
+      background: var(--sage); color: #0d1117;
+      font-weight: 600; font-size: 0.88rem;
+      padding: 13px 30px; border-radius: 8px;
+      transition: all var(--ease);
+    }
+    .btn-fill:hover { opacity:0.88; transform:translateY(-2px); box-shadow: 0 8px 24px rgba(126,200,164,0.3); }
+    .btn-line {
+      color: var(--txt); font-weight: 500; font-size: 0.88rem;
+      padding: 13px 30px; border-radius: 8px;
+      border: 1px solid var(--b);
+      transition: all var(--ease);
+    }
+    .btn-line:hover { border-color: var(--sage); color: var(--sage); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; align-items: center;
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: var(--r); padding: 24px 28px;
+      width: fit-content; max-width: 100%;
+      flex-wrap: wrap; row-gap: 16px;
+      animation: slideDown 0.7s 0.32s ease both;
+    }
+    .stat { display: flex; flex-direction: column; align-items: center; padding: 0 24px; text-align: center; }
+    .stat-n {
+      font-family: var(--f-mono); font-size: clamp(1.4rem,2vw,1.9rem);
+      font-weight: 500; color: var(--sage); line-height: 1; margin-bottom: 5px;
+    }
+    .stat-l { font-size: 0.68rem; color: var(--txt-3); text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-div { width:1px; height:36px; background: var(--b); flex-shrink: 0; }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; right: 32px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0.25;
+    }
+    .scroll-hint span {
+      font-family: var(--f-mono); font-size: 0.6rem;
+      letter-spacing: 0.18em; text-transform: uppercase; writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, var(--txt-2), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.3}50%{opacity:0.9} }
+
+    /* ══ IDENTITY / ABOUT ══ */
+    .identity { padding: 120px 0; background: var(--ink-2); border-top: 1px solid var(--b); }
+    .id-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr;
+      gap: 72px; margin-top: 48px; align-items: start;
+    }
+    .id-intro { margin-bottom: 32px; }
+    .id-intro p {
+      color: var(--txt-2); font-size: 0.975rem;
+      line-height: 1.85; margin-bottom: 18px;
+    }
+    .id-intro p strong { color: var(--txt); font-weight: 600; }
+    .id-intro p em { color: var(--sage); font-style: normal; font-weight: 500; }
+
+    /* Experience timeline */
+    .exp-label {
+      font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--coral); margin-bottom: 20px;
+    }
+    .timeline { position: relative; padding-left: 20px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 4px; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, var(--coral), transparent);
+    }
+    .tl-item { position: relative; padding-bottom: 28px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -24px; top: 5px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--coral); border: 2px solid var(--ink-2);
+      box-shadow: 0 0 0 3px rgba(255,124,92,0.15);
+    }
+    .tl-role { font-weight: 600; font-size: 0.9rem; color: var(--txt); }
+    .tl-co { font-size: 0.82rem; color: var(--coral); margin: 2px 0; }
+    .tl-period {
+      font-family: var(--f-mono); font-size: 0.68rem;
+      color: var(--txt-3); letter-spacing: 0.05em; margin-bottom: 8px;
+    }
+    .tl-desc { font-size: 0.83rem; color: var(--txt-2); line-height: 1.7; }
+
+    /* Strengths + weakness cards */
+    .strength-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+    .s-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: var(--r); padding: 20px;
+      transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+    }
+    .s-card:hover { border-color: rgba(126,200,164,0.3); transform: translateY(-3px); box-shadow: var(--sh-h); }
+    .s-icon { font-size: 1.2rem; color: var(--sage); margin-bottom: 10px; }
+    .s-card h4 { font-size: 0.85rem; font-weight: 600; color: var(--txt); margin-bottom: 6px; }
+    .s-card p { font-size: 0.78rem; color: var(--txt-2); line-height: 1.65; }
+
+    .growth-card {
+      background: linear-gradient(135deg, rgba(232,201,109,0.07), rgba(232,201,109,0.02));
+      border: 1px solid rgba(232,201,109,0.2);
+      border-radius: var(--r); padding: 20px;
+    }
+    .growth-label {
+      font-family: var(--f-mono); font-size: 0.62rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .growth-card p { font-size: 0.82rem; color: var(--txt-2); line-height: 1.7; }
+    .growth-card em { color: var(--gold); font-style: normal; }
+
+    /* ══ PROJECTS ══ */
+    .projects { padding: 120px 0; background: var(--ink); border-top: 1px solid var(--b); }
+    .projects .h2 { margin-bottom: 8px; }
+    .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 48px; }
+
+    .proj-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: 16px; padding: 36px; position: relative;
+      overflow: hidden;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+    .proj-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      opacity: 0; transition: opacity var(--ease);
+    }
+    .proj-card.p1::before { background: linear-gradient(90deg, var(--sage), var(--sky)); }
+    .proj-card.p2::before { background: linear-gradient(90deg, var(--coral), var(--gold)); }
+    .proj-card:hover { border-color: rgba(126,200,164,0.25); transform: translateY(-5px); box-shadow: var(--sh-h); }
+    .proj-card:hover::before { opacity: 1; }
+
+    .proj-num {
+      font-family: var(--f-mono); font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .p1 .proj-num { color: var(--sage); }
+    .p2 .proj-num { color: var(--coral); }
+
+    .proj-title {
+      font-family: var(--f-display); font-size: 1.45rem;
+      font-weight: 400; color: var(--txt); line-height: 1.25; margin-bottom: 16px;
+    }
+    .proj-summary { font-size: 0.875rem; color: var(--txt-2); line-height: 1.8; margin-bottom: 24px; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .proj-tag {
+      font-family: var(--f-mono); font-size: 0.65rem; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 4px; border: 1px solid;
+    }
+    .p1 .proj-tag { color: var(--sage); background: var(--sage-dim); border-color: rgba(126,200,164,0.2); }
+    .p2 .proj-tag { color: var(--coral); background: var(--coral-dim); border-color: rgba(255,124,92,0.2); }
+
+    .proj-links { display: flex; gap: 12px; }
+    .proj-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.8rem; font-weight: 600;
+      padding: 8px 16px; border-radius: 6px;
+      border: 1px solid var(--b);
+      color: var(--txt-2);
+      transition: all var(--ease);
+    }
+    .proj-link:hover { color: var(--txt); border-color: var(--sage); }
+    .proj-link.primary {
+      background: var(--sage); color: #0d1117; border-color: var(--sage);
+    }
+    .proj-link.primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .proj-link svg { width: 13px; height: 13px; }
+
+    /* ══ WORK / CASE STUDIES ══ */
+    .work { padding: 120px 0; background: var(--ink-2); border-top: 1px solid var(--b); }
+    .work .h2 { margin-bottom: 8px; }
+
+    .cs-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: 16px; padding: 40px 44px;
+      margin-top: 48px; position: relative; overflow: hidden;
+      transition: border-color var(--ease), box-shadow var(--ease);
+    }
+    .cs-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--sage), transparent);
+      opacity: 0; transition: opacity var(--ease);
+    }
+    .cs-card:hover { border-color: rgba(126,200,164,0.25); box-shadow: 0 12px 48px rgba(0,0,0,0.4); }
+    .cs-card:hover::before { opacity: 1; }
+
+    .cs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cs-tag {
+      font-family: var(--f-mono); font-size: 0.65rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--sage); background: var(--sage-dim);
+      border: 1px solid rgba(126,200,164,0.2);
+      padding: 4px 10px; border-radius: 4px;
+    }
+    .cs-num {
+      font-family: var(--f-mono); font-size: 2.8rem; font-weight: 400;
+      color: var(--b); line-height: 1; user-select: none;
+    }
+    .cs-title {
+      font-family: var(--f-display); font-size: clamp(1.3rem,2.2vw,1.8rem);
+      color: var(--txt); margin-bottom: 12px; line-height: 1.25; font-weight: 400;
+    }
+    .cs-blurb { color: var(--txt-2); font-size: 0.93rem; margin-bottom: 32px; max-width: 760px; line-height: 1.75; }
+    .cs-body { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .cs-col { display: flex; flex-direction: column; gap: 22px; }
+    .cs-block h5 {
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--txt-3); margin-bottom: 10px;
+    }
+    .cs-block p { color: var(--txt-2); font-size: 0.86rem; line-height: 1.75; }
+    .cs-list { display: flex; flex-direction: column; gap: 7px; }
+    .cs-list li {
+      font-size: 0.86rem; color: var(--txt-2); line-height: 1.6;
+      padding-left: 16px; position: relative;
+    }
+    .cs-list li::before { content:'→'; position:absolute; left:0; color: var(--sage); font-size:0.78rem; }
+    .tool-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tool-tags span {
+      font-family: var(--f-mono); font-size: 0.68rem;
+      color: var(--sky); background: var(--sky-dim);
+      border: 1px solid rgba(91,164,207,0.2);
+      padding: 3px 9px; border-radius: 4px;
+    }
+    .cs-impact { display:flex; background:var(--ink-3); border:1px solid var(--b); border-radius:var(--r-sm); overflow:hidden; margin-top:8px; }
+    .impact-item { display:flex;flex-direction:column;align-items:center;padding:14px 18px;flex:1;text-align:center;border-right:1px solid var(--b);transition:background var(--ease); }
+    .impact-item:last-child { border-right:none; }
+    .impact-item:hover { background: var(--sage-glow); }
+    .impact-n { font-family:var(--f-mono);font-size:1.3rem;font-weight:500;color:var(--sage);line-height:1;margin-bottom:4px; }
+    .impact-d { font-size:0.63rem;color:var(--txt-3);text-transform:uppercase;letter-spacing:0.07em;line-height:1.4; }
+
+    /* ══ SKILLS ══ */
+    .skills-sec { padding: 120px 0; background: var(--ink); border-top: 1px solid var(--b); }
+    .skills-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 28px; margin-top: 48px; }
+    .sg {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: var(--r); padding: 28px;
+      transition: border-color var(--ease);
+    }
+    .sg:hover { border-color: rgba(126,200,164,0.22); }
+    .sg-title {
+      font-family: var(--f-mono); font-size: 0.68rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.14em; color: var(--sage);
+      margin-bottom: 18px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pills span {
+      font-size: 0.76rem; color: var(--txt-2); background: var(--ink-3);
+      border: 1px solid var(--b); padding: 5px 11px; border-radius: 6px;
+      transition: border-color var(--ease), color var(--ease), transform var(--ease);
+      cursor: default;
+    }
+    .pills span:hover { border-color: var(--sage); color: var(--sage); transform: translateY(-2px); }
+    .qa-pills span:hover { border-color: var(--coral); color: var(--coral); }
+    .tech-pills span:hover { border-color: var(--sky); color: var(--sky); }
+    .tools-pills span:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ══ WHY ME ══ */
+    .why { padding: 120px 0; background: var(--ink-2); border-top: 1px solid var(--b); }
+    .diff-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 48px; }
+    .diff-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: var(--r); padding: 28px;
+      transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .diff-card::after {
+      content:''; position:absolute; bottom:0;left:0;right:0;height:2px;
+      background: var(--sage); transform:scaleX(0);
+      transition:transform 0.3s ease; transform-origin:left;
+    }
+    .diff-card:hover { border-color: rgba(126,200,164,0.28); transform:translateY(-5px); box-shadow:var(--sh-h); }
+    .diff-card:hover::after { transform:scaleX(1); }
+    .diff-featured { grid-column: 1/-1; display:grid; grid-template-columns:auto 1fr 1fr; gap:14px 28px; align-items:start; }
+    .diff-icon { font-size:1.5rem; color:var(--sage); margin-bottom:14px; display:block; }
+    .diff-card h4 { font-size:0.9rem;font-weight:600;color:var(--txt);margin-bottom:10px; }
+    .diff-card p { font-size:0.82rem;color:var(--txt-2);line-height:1.75;margin-bottom:14px; }
+    .diff-proof {
+      display:inline-block; font-family:var(--f-mono); font-size:0.67rem; font-weight:500;
+      color:var(--sky); background:var(--sky-dim); border:1px solid rgba(91,164,207,0.2);
+      padding:4px 11px; border-radius:4px; letter-spacing:0.05em;
+    }
+
+    /* ══ HOBBIES ══ */
+    .hobbies { padding: 100px 0; background: var(--ink); border-top: 1px solid var(--b); }
+    .hobby-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 48px; }
+    .hobby-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: var(--r); padding: 28px 24px; text-align: center;
+      transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .hobby-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, var(--glow-c), transparent 70%);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .hobby-card:hover { transform: translateY(-6px); box-shadow: var(--sh-h); border-color: var(--hb-c); }
+    .hobby-card:hover::before { opacity: 1; }
+    .hobby-card:nth-child(1) { --glow-c: rgba(126,200,164,0.08); --hb-c: rgba(126,200,164,0.3); }
+    .hobby-card:nth-child(2) { --glow-c: rgba(91,164,207,0.08); --hb-c: rgba(91,164,207,0.3); }
+    .hobby-card:nth-child(3) { --glow-c: rgba(255,124,92,0.08); --hb-c: rgba(255,124,92,0.3); }
+    .hobby-card:nth-child(4) { --glow-c: rgba(232,201,109,0.08); --hb-c: rgba(232,201,109,0.3); }
+    .hobby-icon { font-size: 2.2rem; margin-bottom: 14px; position: relative; z-index: 1; }
+    .hobby-name { font-size: 0.92rem; font-weight: 600; color: var(--txt); margin-bottom: 8px; position: relative; z-index: 1; }
+    .hobby-desc { font-size: 0.77rem; color: var(--txt-2); line-height: 1.65; position: relative; z-index: 1; }
+    .hobby-new {
+      display: inline-block; font-family: var(--f-mono); font-size: 0.58rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold); background: var(--gold-dim);
+      border: 1px solid rgba(232,201,109,0.25);
+      padding: 2px 7px; border-radius: 3px; margin-top: 8px;
+      position: relative; z-index: 1;
+    }
+
+    /* ══ CONTACT ══ */
+    .contact { padding: 120px 0; background: var(--ink-2); border-top: 1px solid var(--b); }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--card-b);
+      border-radius: 20px; padding: 64px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .contact-card::before {
+      content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%);
+      width:400px; height:400px;
+      background:radial-gradient(circle, rgba(126,200,164,0.07) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .contact-card .h2 { margin: 16px 0; }
+    .contact-card .h2 em { color: var(--sage); font-style: italic; }
+    .contact-sub { color:var(--txt-2);font-size:1rem;max-width:560px;margin:0 auto 48px;line-height:1.75; }
+    .contact-links { display:flex;justify-content:center;gap:18px;flex-wrap:wrap; }
+    .c-link {
+      display:flex;align-items:center;gap:14px;
+      background:var(--ink-3);border:1px solid var(--b);
+      border-radius:var(--r);padding:18px 24px;
+      transition: border-color var(--ease), transform var(--ease), background var(--ease);
+      min-width:210px; text-align:left;
+    }
+    .c-link:hover { border-color:var(--sage); transform:translateY(-4px); background:var(--sage-glow); }
+    .c-icon { font-size:1.2rem;color:var(--sage);width:28px;text-align:center;flex-shrink:0;font-weight:700;font-family:var(--f-mono); }
+    .c-label { font-size:0.65rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--txt-3);font-family:var(--f-mono);margin-bottom:3px; }
+    .c-val { font-size:0.82rem;color:var(--txt);font-weight:500; }
+
+    /* ══ FOOTER ══ */
+    .footer { border-top:1px solid var(--b);padding:28px 0;background:var(--ink); }
+    .footer-inner { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px; }
+    .footer-name { font-family:var(--f-display);font-size:1rem;color:var(--txt);font-weight:300; }
+    .footer-tag { font-size:0.78rem;color:var(--txt-3); }
+    .footer-loc { font-family:var(--f-mono);font-size:0.68rem;color:var(--sage); }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes slideDown {
+      from { opacity:0;transform:translateY(-14px); }
+      to { opacity:1;transform:translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0;transform:translateY(20px); }
+      to { opacity:1;transform:translateY(0); }
+    }
+
+    /* Scroll reveal via intersection observer */
+    .reveal { opacity:0;transform:translateY(24px);transition:opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity:1;transform:translateY(0); }
+    .reveal-delay-1 { transition-delay:0.1s; }
+    .reveal-delay-2 { transition-delay:0.2s; }
+    .reveal-delay-3 { transition-delay:0.3s; }
+    .reveal-delay-4 { transition-delay:0.4s; }
+
+    /* ══ PROGRESS BAR ══ */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--sage); z-index: 600;
+      transform-origin: left; width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 960px) {
+      .id-grid { grid-template-columns: 1fr; gap: 40px; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .cs-body { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr 1fr; }
+      .diff-featured { grid-column:1/-1; grid-template-columns: auto 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hobby-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .wrap { padding: 0 20px; }
+      .nav-inner { padding: 0 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero-stats { flex-direction:column;align-items:stretch;padding:18px; }
+      .stat-div { width:100%;height:1px; }
+      .stat { padding: 10px 0; }
+      .hero-actions { flex-direction:column;gap:10px; }
+      .strength-grid { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .diff-featured { grid-template-columns:1fr; }
+      .diff-featured .diff-icon, .diff-featured h4, .diff-featured p, .diff-featured .diff-proof { grid-column:1; grid-row:auto; }
+      .hobby-grid { grid-template-columns: 1fr 1fr; }
+      .cs-card { padding: 28px 24px; }
+      .contact-card { padding: 36px 22px; }
+      .contact-links { flex-direction:column;align-items:stretch; }
+      .c-link { min-width:unset; }
+      .footer-inner { flex-direction:column;text-align:center; }
+      .scroll-hint { display:none; }
+    }
+    @media (max-width: 480px) {
+      .hobby-grid { grid-template-columns: 1fr; }
+      .cs-impact { flex-direction:column; }
+      .impact-item { border-right:none; border-bottom:1px solid var(--b); }
+      .impact-item:last-child { border-bottom:none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
-  <header class="navbar">
-    <div class="nav-inner">
-      <a href="#hero" class="nav-logo">DR<span class="dot">.</span></a>
+  <!-- CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- READING PROGRESS -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ══ NAVBAR ══ -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#hero" class="nav-logo">Dimple<span>.</span></a>
       <nav class="nav-links">
         <a href="#about">About</a>
-        <a href="#case-studies">Case Studies</a>
+        <a href="#projects">Projects</a>
+        <a href="#work">Work</a>
         <a href="#skills">Skills</a>
-        <a href="#differentiators">Why Me</a>
+        <a href="#why">Why Me</a>
+        <a href="#hobbies">Beyond Work</a>
         <a href="#contact" class="nav-cta">Let's Talk</a>
       </nav>
     </div>
   </header>
 
-  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <!-- ══ HERO ══ -->
   <section class="hero" id="hero">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-inner">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
+    <div class="hero-mesh"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-eyebrow">
+        <span class="pulse"></span>
         Available for new opportunities
       </div>
-      <h1 class="hero-headline">
-        Product Manager<br />
-        <em>with a QA Mindset.</em>
-      </h1>
-      <p class="hero-sub">
-        I ship B2B SaaS that doesn't break in production — 100+ features delivered for a $1.2B+ procurement client with zero critical post-deployment defects. I turn ambiguous requirements into zero-rework PRDs that teams execute without a single follow-up.
+      <h1 class="hero-name">Dimple <em>Rajpal</em></h1>
+      <p class="hero-role">Technical Product Manager</p>
+      <p class="hero-desc">
+        I ship B2B SaaS that doesn't break in production, 100+ features delivered for a $1.2B+ procurement client with zero critical post-deployment defects. I turn ambiguous requirements into zero-rework PRDs that teams execute without a single follow-up.
       </p>
       <div class="hero-actions">
-        <a href="#case-studies" class="btn-primary">View Case Studies</a>
-        <a href="#contact" class="btn-ghost">Get in Touch</a>
+        <a href="#projects" class="btn-fill">View My Projects</a>
+        <a href="#contact" class="btn-line">Get in Touch</a>
       </div>
       <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">100%</span>
-          <span class="stat-label">Transaction Compliance</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">95%</span>
-          <span class="stat-label">On-Time Release Rate</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">80%</span>
-          <span class="stat-label">Reduction in Eng Load</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">0</span>
-          <span class="stat-label">Critical Defects Post-Deploy</span>
-        </div>
+        <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Transaction Compliance</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">95%</span><span class="stat-l">On-Time Release Rate</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">80%</span><span class="stat-l">Reduction in Eng Load</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">0</span><span class="stat-l">Critical Defects Post-Deploy</span></div>
       </div>
     </div>
-    <div class="hero-scroll-hint">
+    <div class="scroll-hint">
       <span>scroll</span>
       <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ ABOUT ═══════════════════════ -->
-  <section class="about" id="about">
-    <div class="section-inner">
-      <div class="section-label">About Me</div>
-      <div class="about-grid">
-        <div class="about-text">
-          <h2 class="section-heading">Building products that hold up — in production, under pressure, at scale.</h2>
-          <p>My path into product management is rooted in an obsession with quality. Working in a high-velocity B2B SaaS environment — shipping 100+ features weekly for a $1.2B+ enterprise procurement client — taught me that a great PRD is only half the job. The other half is making sure what ships actually <em>works</em>.</p>
-          <p>At FactWise, I've owned the full product lifecycle for complex procurement workflows: from stakeholder discovery and PRD writing to UAT facilitation and post-release validation. I've facilitated 70+ stakeholder sessions, resolved 30+ defects per release cycle, and maintained 100% transaction compliance for enterprise clients with 50–200 daily active users.</p>
-          <p>What drives me is the intersection of product strategy and engineering precision — thinking through edge cases before they become escalations, designing validation logic that protects data integrity, and writing specs so airtight that engineering never has to guess.</p>
+  <!-- ══ IDENTITY / ABOUT ══ -->
+  <section class="identity" id="about">
+    <div class="wrap">
+      <span class="chip">About Me</span>
+      <h2 class="h2 reveal">Hi, I'm Dimple, a PM who thinks<br><em style="color:var(--sage);font-style:italic;">like an engineer, ships like a founder.</em></h2>
+
+      <div class="id-grid">
+        <div>
+          <div class="id-intro reveal reveal-delay-1">
+            <p>My path into product management was shaped by an obsession with <strong>quality</strong>. Working in a high-velocity B2B SaaS environment, shipping 100+ features weekly for a $1.2B+ enterprise procurement client, taught me that a great PRD is only half the job. The other half is making sure what ships actually <em>works</em>.</p>
+            <p>At FactWise, I've owned the full product lifecycle for complex procurement workflows: from stakeholder discovery and PRD writing to UAT facilitation and post-release validation. I've facilitated <strong>70+ stakeholder sessions</strong>, resolved <strong>30+ defects per release cycle</strong>, and maintained <strong>100% transaction compliance</strong> for enterprise clients with 50–200 daily active users.</p>
+            <p>What drives me is the intersection of <em>product strategy and engineering precision</em>, thinking through edge cases before they become escalations, designing validation logic that protects data integrity, and writing specs so airtight that engineering never has to guess. Outside of my day job, I've also built two live products from scratch using LLM-assisted development, proving that a PM with a precise spec can ship real software.</p>
+          </div>
+
+          <!-- Experience -->
+          <div class="reveal reveal-delay-2">
+            <div class="exp-label">Experience</div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-role">Technical Product Manager</div>
+                <div class="tl-co">FactWise, B2B Procurement SaaS</div>
+                <div class="tl-period">2023 – Present · Mumbai, India</div>
+                <div class="tl-desc">Owned the end-to-end product lifecycle for a $1.2B+ enterprise procurement platform. Delivered 100+ features across RFQ, PO, approval, and vendor management modules. Zero critical defects across all production releases.</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-role">Product Intern</div>
+                <div class="tl-co">Businessarios & NBLIK</div>
+                <div class="tl-period">2022</div>
+                <div class="tl-desc">Converted business requirements into clear BRDs and user flows while optimizing onboarding workflows, reducing clarification cycles by 30% and improving user productivity by 20%.</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="about-cards">
-          <div class="strength-card">
-            <div class="strength-icon">◈</div>
-            <h4>Product Thinking</h4>
-            <p>RICE/MoSCoW prioritization, OKR alignment, roadmap ownership, and go-to-market strategy for complex enterprise workflows.</p>
+
+        <div>
+          <!-- Strengths -->
+          <div style="margin-bottom:14px;" class="reveal reveal-delay-1">
+            <div class="exp-label" style="color:var(--sage);">Where I'm strong</div>
+            <div class="strength-grid">
+              <div class="s-card">
+                <div class="s-icon">◈</div>
+                <h4>Product Thinking</h4>
+                <p>RICE/MoSCoW prioritization, OKR alignment, roadmap ownership, and GTM strategy for complex enterprise workflows.</p>
+              </div>
+              <div class="s-card">
+                <div class="s-icon">◉</div>
+                <h4>QA-First Mindset</h4>
+                <p>Acceptance criteria, edge case enumeration, defect lifecycle management, zero critical bugs in 100+ releases.</p>
+              </div>
+              <div class="s-card">
+                <div class="s-icon">◎</div>
+                <h4>Stakeholder Wrangling</h4>
+                <p>70+ UAT and discovery sessions. Converting ambiguous enterprise needs into PRDs teams ship without clarification.</p>
+              </div>
+              <div class="s-card">
+                <div class="s-icon">⊕</div>
+                <h4>Data Validation</h4>
+                <p>SQL-level validation, KPI-driven business rules, multi-tier approval logic, keeping enterprise data clean.</p>
+              </div>
+            </div>
           </div>
-          <div class="strength-card">
-            <div class="strength-icon">◉</div>
-            <h4>QA Mindset</h4>
-            <p>Rigorous acceptance criteria, edge case enumeration, defect lifecycle management — zero critical bugs in production across 100+ releases.</p>
-          </div>
-          <div class="strength-card">
-            <div class="strength-icon">◎</div>
-            <h4>Stakeholder Handling</h4>
-            <p>70+ UAT and discovery sessions facilitated. Converting ambiguous enterprise needs into zero-rework PRDs that teams ship without clarification.</p>
-          </div>
-          <div class="strength-card">
-            <div class="strength-icon">⊕</div>
-            <h4>Data Validation</h4>
-            <p>SQL-level data validation, KPI-driven business rules, multi-tier approval logic — keeping enterprise data clean at source.</p>
+
+          <!-- Growth area -->
+          <div class="growth-card reveal reveal-delay-2">
+            <div class="growth-label">🌱 Honestly? Still working on this.</div>
+            <p>Public speaking and presenting to large, unfamiliar audiences is something I'm actively building. I'm sharp one-on-one and in focused stakeholder sessions, but <em>commanding a room of 50+ unfamiliar faces</em> is a skill I'm deliberately developing, through product demos, team retrospectives, and yes, occasionally volunteering to present when it's uncomfortable. Progress > perfection.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ CASE STUDIES ═══════════════════════ -->
-  <section class="case-studies" id="case-studies">
-    <div class="section-inner">
-      <div class="section-label">Case Studies</div>
-      <h2 class="section-heading">Real problems. Real systems. Real outcomes.</h2>
-      <p class="section-sub">Every case study below is drawn from production features shipped to a live $1.2B+ enterprise client. No hypotheticals.</p>
+  <!-- ══ PERSONAL PROJECTS ══ -->
+  <section class="projects" id="projects">
+    <div class="wrap">
+      <span class="chip">Personal Projects</span>
+      <h2 class="h2 reveal">Built from scratch. <em style="color:var(--sage);font-style:italic;">Shipped for real users.</em></h2>
+      <p class="sub reveal reveal-delay-1">Two live products I designed and deployed solo, using LLM-assisted development and precision product specs. Real users, real data, real stakes.</p>
 
-      <!-- ── CS 1 ── -->
-      <article class="cs-card" id="cs1">
+      <div class="proj-grid">
+        <!-- Project 1: ProgressPulse -->
+        <div class="proj-card p1 reveal reveal-delay-1">
+          <div class="proj-num">Project 01 · AI-Powered</div>
+          <h3 class="proj-title">ProgressPulse</h3>
+          <p class="proj-summary">
+            An intelligent habit tracking application that combines daily activity logging with visual progress monitoring. Users can track habits, upload photos (e.g., skincare progress), and generate monthly insights including AI-based before/after comparisons and automated timelapse videos. It features a dynamic dashboard with progress indicators, secure image storage, and a user-friendly interface designed for consistent habit building and measurable improvement.
+          </p>
+          <div class="proj-tags">
+            <span class="proj-tag">Habit Tracking</span>
+            <span class="proj-tag">AI Insights</span>
+            <span class="proj-tag">Photo Logging</span>
+            <span class="proj-tag">Timelapse</span>
+            <span class="proj-tag">LLM-Assisted Dev</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://dimplerajpal.github.io/dimple_rajpal-ProgressPulse/" class="proj-link primary" title="View Live App">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live App
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2: StockMate -->
+        <div class="proj-card p2 reveal reveal-delay-2">
+          <div class="proj-num">Project 02 · Full-Stack</div>
+          <h3 class="proj-title">StockMate</h3>
+          <p class="proj-summary">
+            A comprehensive web-based application to manage daily operations of a stationery business, combining inventory tracking, billing, and purchase management in one platform. Enables real-time stock visibility across shop and warehouse locations, smart product lookup with location mapping, and seamless invoice generation with automated calculations. Features a dynamic dashboard with sales insights, low-stock alerts, and streamlined workflows designed to improve operational efficiency and simplify retail management.
+          </p>
+          <div class="proj-tags">
+            <span class="proj-tag">Retail Management</span>
+            <span class="proj-tag">Billing System</span>
+            <span class="proj-tag">Inventory Control</span>
+            <span class="proj-tag">RBAC</span>
+            <span class="proj-tag">LLM-Assisted Dev</span>
+          </div>
+          <div class="proj-links">
+            <a href="https://dimplerajpal.github.io/dimple_rajpal-stockMate/" class="proj-link primary" title="View Live App">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live App
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ WORK AT FACTWISE ══ -->
+  <section class="work" id="work">
+    <div class="wrap">
+      <span class="chip">Work at FactWise</span>
+      <h2 class="h2 reveal">Real problems. Real systems. <em style="color:var(--sage);font-style:italic;">Real outcomes.</em></h2>
+      <p class="sub reveal reveal-delay-1">Everything below is drawn from production features I shipped to a live $1.2B+ enterprise procurement client. No hypotheticals.</p>
+
+      <!-- Work 1 -->
+      <article class="cs-card reveal">
         <div class="cs-header">
-          <div class="cs-meta">
+          <div class="cs-tags">
             <span class="cs-tag">Procurement SaaS</span>
             <span class="cs-tag">Workflow Design</span>
             <span class="cs-tag">B2B Enterprise</span>
           </div>
-          <div class="cs-number">01</div>
+          <div class="cs-num">01</div>
         </div>
         <h3 class="cs-title">RFQ → Quote → PO Workflow Optimization</h3>
         <p class="cs-blurb">Redesigning the end-to-end procurement transaction flow to eliminate submission errors, enforce compliance rules, and reduce manual corrections by 60%.</p>
-
         <div class="cs-body">
           <div class="cs-col">
             <div class="cs-block">
@@ -137,246 +849,207 @@
             </div>
             <div class="cs-block">
               <h5>💡 Product Thinking</h5>
-              <p>Mapped the full transaction lifecycle — from RFQ creation to vendor quote submission to PO generation. Identified every point where data inconsistency or missing validations caused failures. Prioritized fixes using MoSCoW: must-have compliance validations before workflow UX improvements.</p>
+              <p>Mapped the full transaction lifecycle, from RFQ creation to vendor quote submission to PO generation. Identified every point where data inconsistency or missing validations caused failures. Prioritized fixes using MoSCoW: must-have compliance validations before workflow UX improvements.</p>
             </div>
             <div class="cs-block">
               <h5>⚙️ Solution</h5>
-              <p>Architected KPI-driven validation rules at the quote submission layer. Defined field-level validation specs (required fields, format enforcement, business rule triggers). Designed real-time error surfacing in the UI to prevent silent failures. Built structured PRDs covering 50+ validation scenarios aligned to enterprise compliance requirements.</p>
+              <p>Architected KPI-driven validation rules at the quote submission layer. Defined field-level validation specs covering 50+ validation scenarios. Designed real-time error surfacing in the UI to prevent silent failures.</p>
             </div>
           </div>
           <div class="cs-col">
             <div class="cs-block">
-              <h5>🏗️ System Design Thinking</h5>
-              <p>Designed validation as a layered system: UI-level for immediate feedback, API-level for business rule enforcement, and DB-level for data integrity. Mapped integration touchpoints between RFQ module, vendor portal, and PO generation service. Documented data flows and state transitions in FSDs for engineering.</p>
+              <h5>🏗️ System Design</h5>
+              <p>Designed validation as a layered system: UI-level for immediate feedback, API-level for business rule enforcement, and DB-level for data integrity. Mapped integration touchpoints between RFQ module, vendor portal, and PO generation service.</p>
             </div>
             <div class="cs-block">
               <h5>🧪 QA Strategy</h5>
               <ul class="cs-list">
                 <li>Defined 100+ acceptance criteria covering happy path, edge cases, and failure states</li>
-                <li>Edge cases: partial submissions, concurrent editing by multiple users, decimal precision in pricing fields</li>
-                <li>UAT sessions with 10+ enterprise stakeholders to validate against real procurement scenarios</li>
+                <li>Edge cases: partial submissions, concurrent editing, decimal precision in pricing</li>
+                <li>UAT sessions with 10+ enterprise stakeholders validating real procurement scenarios</li>
                 <li>Regression suite for all validation rule changes before each release</li>
               </ul>
             </div>
-            <div class="cs-block cs-tools">
-              <h5>🛠 Tools Used</h5>
+            <div class="cs-block">
+              <h5>🛠 Tools</h5>
               <div class="tool-tags">
                 <span>SQL (PostgreSQL)</span><span>Postman</span><span>Figma</span><span>Jira</span><span>Notion</span><span>pgAdmin</span>
               </div>
             </div>
             <div class="cs-impact">
-              <div class="impact-item">
-                <span class="impact-num">25%</span>
-                <span class="impact-desc">Higher submission success rate</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">60%</span>
-                <span class="impact-desc">Fewer manual corrections</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">0</span>
-                <span class="impact-desc">Escalations post-launch</span>
-              </div>
+              <div class="impact-item"><span class="impact-n">25%</span><span class="impact-d">Higher submission success</span></div>
+              <div class="impact-item"><span class="impact-n">60%</span><span class="impact-d">Fewer manual corrections</span></div>
+              <div class="impact-item"><span class="impact-n">0</span><span class="impact-d">Escalations post-launch</span></div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- ── CS 2 ── -->
-      <article class="cs-card" id="cs2">
+      <!-- Work 2 -->
+      <article class="cs-card reveal">
         <div class="cs-header">
-          <div class="cs-meta">
+          <div class="cs-tags">
             <span class="cs-tag">Access Control</span>
             <span class="cs-tag">Approval Systems</span>
             <span class="cs-tag">Enterprise SaaS</span>
           </div>
-          <div class="cs-number">02</div>
+          <div class="cs-num">02</div>
         </div>
         <h3 class="cs-title">Multi-Tier Approval System & Role-Based Access Control</h3>
         <p class="cs-blurb">Designing and shipping a configurable, multi-tier approval engine and RBAC framework to enforce procurement governance for 50–200 daily active users.</p>
-
         <div class="cs-body">
           <div class="cs-col">
             <div class="cs-block">
               <h5>🔍 Problem</h5>
-              <p>Enterprise procurement clients required strict governance over spend authorization — transactions were being processed without mandatory approvals, creating compliance violations and audit risk. Existing flows had no configurable approval hierarchy or role-specific access boundaries, making it impossible to enforce policy at scale.</p>
+              <p>Enterprise procurement clients required strict governance over spend authorization, transactions were being processed without mandatory approvals, creating compliance violations and audit risk. No configurable approval hierarchy or role-specific access boundaries existed.</p>
             </div>
             <div class="cs-block">
               <h5>💡 Product Thinking</h5>
-              <p>Ran discovery sessions with procurement heads, finance teams, and IT admins to map approval authority at each spend threshold. Translated organizational hierarchy into configurable product logic. Designed RBAC as a cross-cutting concern — roles gate both UI visibility and API-level permissions to prevent privilege escalation.</p>
+              <p>Ran discovery sessions with procurement heads, finance teams, and IT admins to map approval authority at each spend threshold. Designed RBAC as a cross-cutting concern, roles gate both UI visibility and API-level permissions to prevent privilege escalation.</p>
             </div>
             <div class="cs-block">
               <h5>⚙️ Solution</h5>
-              <p>Architected a multi-tier approval engine where approval chains are dynamically resolved based on transaction type, spend value, and department. Built role definitions covering buyer, vendor, approver, admin, and read-only personas. Designed approval state machine: Draft → Pending Approval → Approved/Rejected → PO Issued, with full audit trail at each transition.</p>
+              <p>Architected a multi-tier approval engine where approval chains are dynamically resolved based on transaction type, spend value, and department. Designed approval state machine: Draft → Pending → Approved/Rejected → PO Issued, with full audit trail.</p>
             </div>
           </div>
           <div class="cs-col">
             <div class="cs-block">
-              <h5>🏗️ System Design Thinking</h5>
-              <p>Modeled the approval engine as a rules-based decision tree: conditions (spend threshold, category, entity) trigger approval tier assignment. Role permissions stored as a matrix mapping (role × resource × action). Documented state transitions, timeout handling, and delegation logic in system flow diagrams for engineering handoff.</p>
+              <h5>🏗️ System Design</h5>
+              <p>Modeled the approval engine as a rules-based decision tree: conditions trigger approval tier assignment. Role permissions stored as a matrix mapping (role × resource × action). Documented state transitions, timeout handling, and delegation logic for engineering.</p>
             </div>
             <div class="cs-block">
               <h5>🧪 QA Strategy</h5>
               <ul class="cs-list">
-                <li>Matrix testing: all role × permission combinations validated (buyer cannot approve own PO, etc.)</li>
-                <li>Edge cases: simultaneous approvals, approver out-of-office delegation, threshold boundary conditions (e.g. ₹99,999 vs ₹1,00,000)</li>
-                <li>Security testing: privilege escalation attempts, API calls with invalid role tokens</li>
-                <li>Facilitated UAT with 5+ procurement managers to validate real-world authority maps</li>
+                <li>Matrix testing: all role × permission combinations validated</li>
+                <li>Edge cases: simultaneous approvals, delegation, threshold boundaries (₹99,999 vs ₹1,00,000)</li>
+                <li>Security testing: privilege escalation attempts, invalid role token API calls</li>
+                <li>UAT with 5+ procurement managers validating real-world authority maps</li>
               </ul>
             </div>
-            <div class="cs-block cs-tools">
-              <h5>🛠 Tools Used</h5>
+            <div class="cs-block">
+              <h5>🛠 Tools</h5>
               <div class="tool-tags">
                 <span>REST APIs</span><span>Postman</span><span>SQL</span><span>Figma</span><span>Jira</span><span>Notion</span>
               </div>
             </div>
             <div class="cs-impact">
-              <div class="impact-item">
-                <span class="impact-num">100%</span>
-                <span class="impact-desc">Transaction compliance achieved</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">0</span>
-                <span class="impact-desc">Compliance escalations</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">50–200</span>
-                <span class="impact-desc">DAU governed flawlessly</span>
-              </div>
+              <div class="impact-item"><span class="impact-n">100%</span><span class="impact-d">Transaction compliance</span></div>
+              <div class="impact-item"><span class="impact-n">0</span><span class="impact-d">Compliance escalations</span></div>
+              <div class="impact-item"><span class="impact-n">50–200</span><span class="impact-d">DAU governed</span></div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- ── CS 3 ── -->
-      <article class="cs-card" id="cs3">
+      <!-- Work 3 -->
+      <article class="cs-card reveal">
         <div class="cs-header">
-          <div class="cs-meta">
+          <div class="cs-tags">
             <span class="cs-tag">Release Management</span>
             <span class="cs-tag">QA Strategy</span>
             <span class="cs-tag">Defect Prevention</span>
           </div>
-          <div class="cs-number">03</div>
+          <div class="cs-num">03</div>
         </div>
         <h3 class="cs-title">Zero Critical Defect Release Strategy</h3>
-        <p class="cs-blurb">Building and owning a release quality framework that sustained a 95% on-time rate across 100+ weekly production deployments — with zero critical post-deployment defects.</p>
-
+        <p class="cs-blurb">Building and owning a release quality framework that sustained a 95% on-time rate across 100+ weekly production deployments, with zero critical post-deployment defects.</p>
         <div class="cs-body">
           <div class="cs-col">
             <div class="cs-block">
               <h5>🔍 Problem</h5>
-              <p>A weekly release cadence of 100+ production deployments created constant defect risk. Each cycle involved 30+ defects requiring triage, fix, and re-validation — and with enterprise clients relying on the platform daily, a single critical defect reaching production was unacceptable. The challenge: move fast without breaking things.</p>
+              <p>A weekly release cadence of 100+ production deployments created constant defect risk. Each cycle involved 30+ defects requiring triage, fix, and re-validation, and with enterprise clients relying on the platform daily, one critical defect in production was unacceptable.</p>
             </div>
             <div class="cs-block">
               <h5>💡 Product Thinking</h5>
-              <p>Shifted quality left: acceptance criteria became the first artifact written in every feature ticket — before design, before engineering. By defining "done" precisely upfront, QA and engineering operated from the same contract. Introduced a defect severity classification system (P0–P3) to ensure critical issues were never deferred across release cycles.</p>
+              <p>Shifted quality left: acceptance criteria became the first artifact written in every feature ticket, before design, before engineering. Introduced a defect severity system (P0–P3) to ensure critical issues were never deferred across release cycles.</p>
             </div>
             <div class="cs-block">
               <h5>⚙️ Solution</h5>
-              <p>Established a structured release gate: features could only advance to staging when all acceptance criteria had corresponding test scenarios documented. Built a defect tracking workflow in Jira with mandatory root-cause fields to enable pattern detection. Owned the final pre-release sign-off, personally validating critical path flows before every deployment.</p>
+              <p>Established a structured release gate: features advance to staging only when all acceptance criteria have test scenarios documented. Built a defect tracking workflow with mandatory root-cause fields. Personally owned the final pre-release sign-off.</p>
             </div>
           </div>
           <div class="cs-col">
             <div class="cs-block">
-              <h5>🏗️ System Design Thinking</h5>
-              <p>Mapped the full defect lifecycle: discovery → triage → assignment → fix → re-test → regression → sign-off. Designed branching logic for critical vs. non-critical defects — P0/P1 blockers halt the release; P2/P3 tracked for next cycle. Maintained a release readiness dashboard in Notion visible to all stakeholders in real time.</p>
+              <h5>🏗️ System Design</h5>
+              <p>Mapped the full defect lifecycle: discovery → triage → fix → re-test → regression → sign-off. P0/P1 blockers halt the release; P2/P3 tracked for next cycle. Maintained a release readiness dashboard in Notion visible to all stakeholders in real time.</p>
             </div>
             <div class="cs-block">
               <h5>🧪 QA Strategy</h5>
               <ul class="cs-list">
-                <li>Acceptance criteria written as Given/When/Then scenarios for every user story</li>
+                <li>Acceptance criteria written as Given/When/Then for every user story</li>
                 <li>Mandatory regression suite on all modified modules before production push</li>
                 <li>API contract testing via Postman to catch integration breaks before UI testing</li>
-                <li>SQL validation queries to verify data integrity post-migration and post-deploy</li>
+                <li>SQL validation queries to verify data integrity post-deploy</li>
                 <li>30+ defects resolved per cycle over 95+ consecutive on-time releases</li>
               </ul>
             </div>
-            <div class="cs-block cs-tools">
-              <h5>🛠 Tools Used</h5>
+            <div class="cs-block">
+              <h5>🛠 Tools</h5>
               <div class="tool-tags">
                 <span>Jira</span><span>Postman</span><span>SQL</span><span>PostgreSQL</span><span>pgAdmin</span><span>Notion</span><span>GitHub</span>
               </div>
             </div>
             <div class="cs-impact">
-              <div class="impact-item">
-                <span class="impact-num">95%</span>
-                <span class="impact-desc">On-time release rate</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">0</span>
-                <span class="impact-desc">Critical post-deploy defects</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">30+</span>
-                <span class="impact-desc">Defects resolved per cycle</span>
-              </div>
+              <div class="impact-item"><span class="impact-n">95%</span><span class="impact-d">On-time release rate</span></div>
+              <div class="impact-item"><span class="impact-n">0</span><span class="impact-d">Critical post-deploy defects</span></div>
+              <div class="impact-item"><span class="impact-n">30+</span><span class="impact-d">Defects resolved per cycle</span></div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- ── CS 4 ── -->
-      <article class="cs-card" id="cs4">
+      <!-- Work 4 -->
+      <article class="cs-card reveal">
         <div class="cs-header">
-          <div class="cs-meta">
+          <div class="cs-tags">
             <span class="cs-tag">AI-Assisted PM</span>
             <span class="cs-tag">LLM Prototyping</span>
             <span class="cs-tag">Product Development</span>
           </div>
-          <div class="cs-number">04</div>
+          <div class="cs-num">04</div>
         </div>
         <h3 class="cs-title">AI-Assisted Product Development & Rapid Prototyping</h3>
-        <p class="cs-blurb">Reducing engineering load by 80% and prototype-to-deploy time by 60% by embedding LLM-assisted development into the product lifecycle — from PRD to production-grade MVP.</p>
-
+        <p class="cs-blurb">Reducing engineering load by 80% and prototype-to-deploy time by 60% by embedding LLM-assisted development into the product lifecycle, from PRD to production-grade MVP.</p>
         <div class="cs-body">
           <div class="cs-col">
             <div class="cs-block">
               <h5>🔍 Problem</h5>
-              <p>Engineering sprint capacity was consistently consumed by prototyping and scaffolding work rather than core feature development. Stakeholder demos required long lead times, slowing down requirement validation. Meanwhile, two personal product ideas (StockMate and ProgressPulse) needed to go from concept to live product — without a dev team.</p>
+              <p>Engineering sprint capacity was consistently consumed by prototyping and scaffolding work rather than core feature development. Meanwhile, StockMate and ProgressPulse needed to go from concept to live product, without a dev team.</p>
             </div>
             <div class="cs-block">
               <h5>💡 Product Thinking</h5>
-              <p>Identified that LLMs could compress the prototype-to-staging cycle dramatically when guided by precise, well-structured product specs. Developed a prompting discipline: scoping modules as independent units, defining data models and UI states upfront, and specifying integration contracts before generation. The PM's ability to write clear specs became the leverage multiplier for AI output quality.</p>
+              <p>Identified that LLMs could compress the prototype-to-staging cycle dramatically when guided by precise, well-structured product specs. Developed a prompting discipline: scoping modules as independent units, defining data models and UI states upfront, specifying integration contracts before generation.</p>
             </div>
             <div class="cs-block">
               <h5>⚙️ Solution</h5>
-              <p>At FactWise: collaborated with Claude to generate functional MVPs that the dev team integrated directly into the product — eliminating scaffolding from engineering sprints. For StockMate: designed and shipped a live retail management system with 4 decoupled modules (POS billing, inventory control, purchase tracking, RBAC) entirely via LLM-assisted development. For ProgressPulse: architected a mobile app with 5 integrated modules including AI progress tracking, photo logging, and timelapse generation.</p>
+              <p>At FactWise: collaborated with Claude to generate functional MVPs that the dev team integrated directly. For StockMate: shipped a live retail management system with 4 decoupled modules entirely via LLM-assisted development. For ProgressPulse: architected a mobile app with 5 integrated modules including AI progress tracking and timelapse generation.</p>
             </div>
           </div>
           <div class="cs-col">
             <div class="cs-block">
-              <h5>🏗️ System Design Thinking</h5>
-              <p>StockMate: Designed 4 decoupled modules for independent scaling. Defined database schema, auth strategy, and API contracts before generation. ProgressPulse: Architected background pipeline for image processing, storage strategy for photo logs, and auth flow covering session management. Both products shipped with production-grade technical blueprints validated through LLM-assisted design review.</p>
+              <h5>🏗️ System Design</h5>
+              <p>StockMate: 4 decoupled modules for independent scaling. Defined database schema, auth strategy, and API contracts before generation. ProgressPulse: background pipeline for image processing, storage strategy for photo logs, and session management auth flow.</p>
             </div>
             <div class="cs-block">
               <h5>🧪 QA Strategy</h5>
               <ul class="cs-list">
-                <li>LLM-generated code treated as untrusted: all outputs reviewed against acceptance criteria before integration</li>
+                <li>LLM-generated code treated as untrusted: all outputs reviewed against acceptance criteria</li>
                 <li>Functional testing on every module boundary before stitching integrations</li>
                 <li>StockMate: invoice flow, inventory reconciliation, and role access tested with real retail scenarios</li>
                 <li>ProgressPulse: timelapse generation and image pipeline tested with edge-case photo inputs</li>
                 <li>Both products currently serving real, active users in production</li>
               </ul>
             </div>
-            <div class="cs-block cs-tools">
-              <h5>🛠 Tools Used</h5>
+            <div class="cs-block">
+              <h5>🛠 Tools</h5>
               <div class="tool-tags">
                 <span>Claude AI</span><span>LLM Prototyping</span><span>Claude API</span><span>SQL</span><span>Figma</span><span>GitHub</span><span>Notion</span>
               </div>
             </div>
             <div class="cs-impact">
-              <div class="impact-item">
-                <span class="impact-num">80%</span>
-                <span class="impact-desc">Reduction in engineering load</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">60%</span>
-                <span class="impact-desc">Faster prototype-to-deploy</span>
-              </div>
-              <div class="impact-item">
-                <span class="impact-num">2</span>
-                <span class="impact-desc">Live products shipped solo</span>
-              </div>
+              <div class="impact-item"><span class="impact-n">80%</span><span class="impact-d">Reduction in eng load</span></div>
+              <div class="impact-item"><span class="impact-n">60%</span><span class="impact-d">Faster prototype-to-deploy</span></div>
+              <div class="impact-item"><span class="impact-n">2</span><span class="impact-d">Live products shipped solo</span></div>
             </div>
           </div>
         </div>
@@ -385,183 +1058,241 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════ SKILLS ═══════════════════════ -->
-  <section class="skills" id="skills">
-    <div class="section-inner">
-      <div class="section-label">Skills</div>
-      <h2 class="section-heading">The full stack of a product manager who ships and validates.</h2>
-
+  <!-- ══ SKILLS ══ -->
+  <section class="skills-sec" id="skills">
+    <div class="wrap">
+      <span class="chip">Skills</span>
+      <h2 class="h2 reveal">The full PM<br>who ships <em style="color:var(--sage);font-style:italic;">and</em> validates.</h2>
       <div class="skills-grid">
-        <div class="skill-group">
-          <h4 class="skill-group-title">Product Management</h4>
-          <div class="skill-pills">
-            <span>Product Strategy</span>
-            <span>Roadmapping</span>
-            <span>PRD / BRD / FSD</span>
-            <span>User Stories</span>
-            <span>OKRs & KPIs</span>
-            <span>A/B Testing</span>
-            <span>RICE Prioritization</span>
-            <span>MoSCoW</span>
-            <span>Sprint Planning</span>
-            <span>Go-to-Market Strategy</span>
-            <span>Stakeholder Management</span>
-            <span>Product Lifecycle Management</span>
-            <span>Cross-functional Collaboration</span>
-            <span>Discovery & UAT Sessions</span>
+        <div class="sg reveal reveal-delay-1">
+          <div class="sg-title">Product Management</div>
+          <div class="pills">
+            <span>Product Strategy</span><span>Roadmapping</span><span>PRD / BRD / FSD</span><span>User Stories</span>
+            <span>OKRs & KPIs</span><span>A/B Testing</span><span>RICE Prioritization</span><span>MoSCoW</span>
+            <span>Sprint Planning</span><span>Go-to-Market Strategy</span><span>Stakeholder Management</span>
+            <span>Product Lifecycle Management</span><span>Cross-functional Collaboration</span><span>Discovery & UAT Sessions</span>
           </div>
         </div>
-
-        <div class="skill-group">
-          <h4 class="skill-group-title">QA & Testing</h4>
-          <div class="skill-pills qa-pills">
-            <span>Acceptance Criteria Design</span>
-            <span>Defect Lifecycle Management</span>
-            <span>Edge Case Analysis</span>
-            <span>Regression Testing</span>
-            <span>Given / When / Then</span>
-            <span>API Contract Testing</span>
-            <span>UAT Facilitation</span>
-            <span>Release Gate Ownership</span>
-            <span>Data Validation</span>
-            <span>Root Cause Analysis</span>
-            <span>P0–P3 Severity Triage</span>
+        <div class="sg reveal reveal-delay-2">
+          <div class="sg-title">QA & Testing</div>
+          <div class="pills qa-pills">
+            <span>Acceptance Criteria Design</span><span>Defect Lifecycle Management</span><span>Edge Case Analysis</span>
+            <span>Regression Testing</span><span>Given / When / Then</span><span>API Contract Testing</span>
+            <span>UAT Facilitation</span><span>Release Gate Ownership</span><span>Data Validation</span>
+            <span>Root Cause Analysis</span><span>P0–P3 Severity Triage</span>
           </div>
         </div>
-
-        <div class="skill-group">
-          <h4 class="skill-group-title">Technical Skills</h4>
-          <div class="skill-pills tech-pills">
-            <span>SQL (PostgreSQL)</span>
-            <span>REST APIs</span>
-            <span>Postman</span>
-            <span>JSON</span>
-            <span>System Design</span>
-            <span>Data Analysis</span>
-            <span>Power BI</span>
-            <span>LLM Prototyping</span>
-            <span>Claude API</span>
-            <span>UX Prototyping</span>
-            <span>Wireframing</span>
-            <span>pgAdmin</span>
-            <span>GitHub</span>
-            <span>Advanced Excel</span>
-            <span>Google Analytics</span>
+        <div class="sg reveal reveal-delay-1">
+          <div class="sg-title">Technical Skills</div>
+          <div class="pills tech-pills">
+            <span>SQL (PostgreSQL)</span><span>REST APIs</span><span>Postman</span><span>JSON</span>
+            <span>System Design</span><span>Data Analysis</span><span>Power BI</span><span>LLM Prototyping</span>
+            <span>Claude API</span><span>UX Prototyping</span><span>Wireframing</span><span>pgAdmin</span>
+            <span>GitHub</span><span>Advanced Excel</span><span>Google Analytics</span>
           </div>
         </div>
-
-        <div class="skill-group">
-          <h4 class="skill-group-title">Tools & Platforms</h4>
-          <div class="skill-pills tools-pills">
-            <span>Jira</span>
-            <span>Figma</span>
-            <span>Balsamiq</span>
-            <span>Notion</span>
-            <span>GitHub</span>
-            <span>pgAdmin</span>
-            <span>Agile / Scrum</span>
-            <span>Claude AI</span>
+        <div class="sg reveal reveal-delay-2">
+          <div class="sg-title">Tools & Platforms</div>
+          <div class="pills tools-pills">
+            <span>Jira</span><span>Figma</span><span>Balsamiq</span><span>Notion</span>
+            <span>GitHub</span><span>pgAdmin</span><span>Agile / Scrum</span><span>Claude AI</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ DIFFERENTIATORS ═══════════════════════ -->
-  <section class="differentiators" id="differentiators">
-    <div class="section-inner">
-      <div class="section-label">Why Me</div>
-      <h2 class="section-heading">What Makes Me Different</h2>
-      <p class="section-sub">Most PMs hand off specs and wait for QA to find problems. I build the QA strategy into the spec itself.</p>
+  <!-- ══ WHY ME ══ -->
+  <section class="why" id="why">
+    <div class="wrap">
+      <span class="chip">Why Me</span>
+      <h2 class="h2 reveal">What makes me different</h2>
+      <p class="sub reveal reveal-delay-1">Most PMs hand off specs and wait for QA to find problems. I build the QA strategy into the spec itself.</p>
 
       <div class="diff-grid">
-        <div class="diff-card diff-featured">
-          <div class="diff-icon">⬡</div>
+        <div class="diff-card reveal reveal-delay-1">
+          <span class="diff-icon">◈</span>
           <h4>QA-First Product Thinking</h4>
-          <p>I write acceptance criteria before design starts. Every feature ticket I own includes happy-path, edge-case, and failure-state scenarios — documented before a single line of code is written. This is why we've shipped 100+ weekly releases with zero critical production defects.</p>
+          <p>I write acceptance criteria before design starts. Every feature ticket includes happy-path, edge-case, and failure-state scenarios, documented before a single line of code is written. This is why we've shipped 100+ weekly releases with zero critical production defects.</p>
           <div class="diff-proof">Result: 0 critical post-deploy defects across 100+ releases</div>
         </div>
-
-        <div class="diff-card">
-          <div class="diff-icon">◈</div>
+        <div class="diff-card reveal reveal-delay-1">
+          <span class="diff-icon">◈</span>
           <h4>Edge Case Mindset</h4>
-          <p>I think in boundary conditions. Threshold amounts (₹99,999 vs ₹1,00,000), concurrent user edits, partial form submissions, decimal precision in pricing — these are the scenarios I document proactively, not reactively.</p>
+          <p>I think in boundary conditions. Threshold amounts (₹99,999 vs ₹1,00,000), concurrent user edits, partial form submissions, decimal precision, these are the scenarios I document proactively, not reactively.</p>
           <div class="diff-proof">Result: 100% compliance across all approval flows</div>
         </div>
-
-        <div class="diff-card">
-          <div class="diff-icon">◉</div>
+        <div class="diff-card reveal reveal-delay-2">
+          <span class="diff-icon">◉</span>
           <h4>Zero-Rework PRDs</h4>
-          <p>Engineering has never asked me for a clarification after picking up one of my specs. 70+ stakeholder and UAT sessions have been distilled into PRDs precise enough that cross-functional teams execute without follow-up. That's a measurable, repeatable outcome.</p>
+          <p>Engineering has never asked me for clarification after picking up one of my specs. 70+ stakeholder sessions distilled into PRDs precise enough that cross-functional teams execute without follow-up.</p>
           <div class="diff-proof">Result: 0 clarification cycles across all releases</div>
         </div>
-
-        <div class="diff-card">
-          <div class="diff-icon">◎</div>
+        <div class="diff-card reveal reveal-delay-1">
+          <span class="diff-icon">◎</span>
           <h4>Strong Validation Approach</h4>
-          <p>I validate at every layer: SQL queries to check data integrity post-deploy, Postman collections to test API contracts before UI testing, and manual critical-path validation before every release sign-off. I treat production data like it matters — because for enterprise clients, it does.</p>
+          <p>I validate at every layer: SQL queries to check data integrity post-deploy, Postman collections to test API contracts before UI testing, and manual critical-path validation before every release sign-off.</p>
           <div class="diff-proof">Result: 25% higher submission success rate</div>
         </div>
-
-        <div class="diff-card">
-          <div class="diff-icon">⊕</div>
+        <div class="diff-card reveal reveal-delay-2">
+          <span class="diff-icon">⊕</span>
           <h4>LLM-Augmented PM</h4>
-          <p>I've shipped two live products and reduced engineering load by 80% using LLM-assisted development — not by generating code blindly, but by writing product specs precise enough that AI output can be integrated directly. This is the future of product management, and I'm already doing it.</p>
+          <p>I've shipped two live products and reduced engineering load by 80% using LLM-assisted development, not by generating code blindly, but by writing product specs precise enough that AI output integrates directly.</p>
           <div class="diff-proof">Result: 80% reduction in engineering load</div>
         </div>
-
-        <div class="diff-card">
-          <div class="diff-icon">⬢</div>
+        <div class="diff-card reveal reveal-delay-3">
+          <span class="diff-icon">⬢</span>
           <h4>Enterprise-Grade Reliability</h4>
-          <p>A $1.2B+ procurement client with 50–200 daily active users depends on the features I ship. That context has made me deeply conservative about what "done" means: it means validated, tested, and compliant — not just deployed.</p>
+          <p>A $1.2B+ procurement client with 50–200 daily users depends on the features I ship. That context has made me conservative about what "done" means: validated, tested, and compliant, not just deployed.</p>
           <div class="diff-proof">Result: 95% on-time releases sustained</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ CONTACT ═══════════════════════ -->
+  <!-- ══ HOBBIES ══ -->
+  <section class="hobbies" id="hobbies">
+    <div class="wrap">
+      <span class="chip">Beyond Work</span>
+      <h2 class="h2 reveal">What I do when I'm<br><em style="color:var(--sage);font-style:italic;">not shipping features.</em></h2>
+      <p class="sub reveal reveal-delay-1">The things that keep me human, curious, and grounded.</p>
+
+      <div class="hobby-grid">
+        <div class="hobby-card reveal reveal-delay-1">
+          <div class="hobby-icon">✏️</div>
+          <div class="hobby-name">Sketching</div>
+          <p class="hobby-desc">I’ve loved drawing since childhood and now enjoy creating realistic sketches. It’s something that helps me relax, especially with a bit of music or a show in the background.</p>
+        </div>
+        <div class="hobby-card reveal reveal-delay-2">
+          <div class="hobby-icon">📚</div>
+          <div class="hobby-name">Reading</div>
+          <p class="hobby-desc">I enjoy reading, especially mystery novels. Non-fiction is a bit challenging, but I’ve recently started exploring it and managed to finish a couple of books.</p>
+        </div>
+        <div class="hobby-card reveal reveal-delay-3">
+          <div class="hobby-icon">🎬</div>
+          <div class="hobby-name">Watching Movies</div>
+          <p class="hobby-desc">Watching movies or series is my way of spending quality time with family, it’s more about the togetherness than just the content.</p>
+        </div>
+        <div class="hobby-card reveal reveal-delay-4">
+          <div class="hobby-icon">🥾</div>
+          <div class="hobby-name">Trekking</div>
+          <p class="hobby-desc">Recently got into trekking and already love it. Completed the Kedarnath trek, and the whole journey, from effort to reaching the destination—was an amazing experience.</p>
+          <div class="hobby-new">Just started</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══ -->
   <section class="contact" id="contact">
-    <div class="section-inner">
-      <div class="contact-card">
-        <div class="section-label">Contact</div>
-        <h2 class="contact-heading">Let's build something that <em>works.</em></h2>
-        <p class="contact-sub">I'm open to product management roles — especially in B2B SaaS, enterprise software, and AI-powered products. If you're looking for someone who ships with precision and validates with rigor, let's talk.</p>
+    <div class="wrap">
+      <div class="contact-card reveal">
+        <span class="chip">Let's Connect</span>
+        <h2 class="h2">Let's build something that <em>works.</em></h2>
+        <p class="contact-sub">I'm open to product management roles, especially in B2B SaaS, enterprise software, and AI-powered products. If you're looking for someone who ships with precision and validates with rigor, I'd love to talk.</p>
         <div class="contact-links">
-          <a href="mailto:rajpaldimple28@gmail.com" class="contact-link email-link">
-            <span class="contact-link-icon">✉</span>
-            <div>
-              <div class="contact-link-label">Email</div>
-              <div class="contact-link-value">rajpaldimple28@gmail.com</div>
-            </div>
+          <a href="mailto:rajpaldimple28@gmail.com" class="c-link">
+            <span class="c-icon">✉</span>
+            <div><div class="c-label">Email</div><div class="c-val">rajpaldimple28@gmail.com</div></div>
           </a>
-          <a href="https://www.linkedin.com/in/dimple-rajpal" target="_blank" class="contact-link linkedin-link">
-            <span class="contact-link-icon">in</span>
-            <div>
-              <div class="contact-link-label">LinkedIn</div>
-              <div class="contact-link-value">linkedin.com/in/dimple-rajpal</div>
-            </div>
+          <a href="https://www.linkedin.com/in/dimple-rajpal" target="_blank" class="c-link">
+            <span class="c-icon">in</span>
+            <div><div class="c-label">LinkedIn</div><div class="c-val">linkedin.com/in/dimple-rajpal</div></div>
           </a>
-          <a href="tel:+919322186523" class="contact-link phone-link">
-            <span class="contact-link-icon">☏</span>
-            <div>
-              <div class="contact-link-label">Phone</div>
-              <div class="contact-link-value">+91 93221 86523</div>
-            </div>
+          <a href="tel:+919322186523" class="c-link">
+            <span class="c-icon">☏</span>
+            <div><div class="c-label">Phone</div><div class="c-val">+91 93221 86523</div></div>
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <!-- ══ FOOTER ══ -->
   <footer class="footer">
-    <div class="footer-inner">
+    <div class="wrap footer-inner">
       <span class="footer-name">Dimple Rajpal</span>
-      <span class="footer-tagline">Technical Product Manager · B2B SaaS · Procurement Domain</span>
-      <span class="footer-note">Mumbai, India · Open to opportunities</span>
+      <span class="footer-tag">Technical Product Manager · B2B SaaS · Procurement Domain</span>
+      <span class="footer-loc">Mumbai, India · Open to opportunities</span>
     </div>
   </footer>
 
+  <script>
+    // Custom cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+    function animRing() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      ring.style.left = rx+'px';
+      ring.style.top = ry+'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+    document.querySelectorAll('a, button, .proj-card, .s-card, .hobby-card').forEach(el => {
+      el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.8)'; ring.style.borderColor = 'rgba(126,200,164,0.7)'; dot.style.transform = 'translate(-50%,-50%) scale(0.5)'; });
+      el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(126,200,164,0.4)'; dot.style.transform = 'translate(-50%,-50%) scale(1)'; });
+    });
+
+    // Reading progress bar
+    const bar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      bar.style.width = pct + '%';
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Active nav highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => {
+            a.style.color = '';
+            if (a.getAttribute('href') === '#' + e.target.id) a.style.color = 'var(--txt)';
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+    sections.forEach(s => sectionObserver.observe(s));
+
+    // Stat counter animation
+    function animateCount(el, target, isPercent, isZero) {
+      if (isZero) { el.textContent = '0'; return; }
+      let start = 0;
+      const end = parseInt(target);
+      if (isNaN(end)) { el.textContent = target; return; }
+      const dur = 1400;
+      const step = dur / end;
+      const timer = setInterval(() => {
+        start += 1;
+        el.textContent = start + (isPercent ? '%' : '');
+        if (start >= end) { el.textContent = target; clearInterval(timer); }
+      }, step);
+    }
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.stat-n').forEach(s => {
+            const raw = s.textContent;
+            const isPercent = raw.includes('%');
+            const isZero = raw === '0';
+            animateCount(s, raw, isPercent, isZero);
+          });
+          statsObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.hero-stats').forEach(el => statsObserver.observe(el));
+  </script>
 </body>
 </html>
